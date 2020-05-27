@@ -1,19 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-<style>
-body {
-    color: #333;
-    font-size: 25pt;
-    background-color: blue;
-}
-
-h1 {
-    font-size: 150pt;
-    color: red;
-}</style>
-<script>
 
 //important
 window.token = '{{ token }}';
@@ -83,43 +67,4 @@ function getMethods(obj) {
       }
     }
     return result;
-}</script>
-<script>
-function serialHandler(response) {
-    if (this.responseText) {
-        var response = JSON.parse(this.responseText);
-        document.getElementById("connectionStatus").innerHTML = response.result;
-    }
-
 }
-
-
-
-function checkConnection() {
-    doAjax("/connection", "POST", serialHandler);
-}
-</script>
-<script>
-function doStuffHandler(response) {
-    if (this.responseText) {
-        var response = JSON.parse(this.responseText);
-        document.getElementById("stuff-container").innerHTML = response.result;
-    }
-
-}
-
-function toggleFullscreen() {
-    doAjax("/fullscreen", "POST", doStuffHandler);
-}</script>
-</head>
-<body>
-
-<p> Welcome to the dad code</p>
-<button onclick="checkConnection()">Click to reconnect the serial interfaces</button>
-<div id="connectionStatus"> </div>
-<button onclick="toggleFullscreen()">Toggle fullscreen</button>
-<div id="stuff-container"></div>
-<a href="setup"> Take me to setup</a>
-
-</body>
-</html>

@@ -1,11 +1,14 @@
 import logging
 import webview
+import htmltools
 
 from contextlib import redirect_stdout
 from io import StringIO
 from threading import Thread, Lock
 from time import sleep
 from server import run_server
+import sys
+
 
 server_lock = Lock()
 
@@ -30,6 +33,10 @@ def url_ok(url, port):
 
 if __name__ == '__main__':
 
+    if htmltools.build_html() != True:
+        print('Failed to build HTML', file=sys.stderr)
+        exit(1)
+    
     stream = StringIO()
     with redirect_stdout(stream):
         logger.debug('Starting server')
@@ -44,3 +51,4 @@ if __name__ == '__main__':
         logger.debug('Server started')
         window = webview.create_window('My first pywebview application', 'http://127.0.0.1:23948')
         webview.start(debug=True)
+

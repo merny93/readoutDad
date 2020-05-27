@@ -1,13 +1,12 @@
 """
 Application stub
 """
-
+import sys
 
 def initialize():
-    #will run everytime the index page is loaded
-    #only initalize the serial port if it has yet to be initalized
+    #will run everytime any page loads
 
-    print("init function ran")
+    print('Hello world!', file=sys.stderr)
 
     return True
 
@@ -18,7 +17,7 @@ def do_stuff():
     return response
 
 def serial_connection():
-    print("hello")
+    print("hello", file=sys.stderr)
     return True
 
 def set_params(stuff):

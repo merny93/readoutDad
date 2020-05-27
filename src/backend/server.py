@@ -6,6 +6,7 @@ from functools import wraps
 from flask import Flask, url_for, render_template, jsonify, request, make_response
 import webview
 import app
+import sys
 
 gui_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'gui')  # development path
 
@@ -99,9 +100,10 @@ def choose_path():
     Invoke a folder selection dialog here
     :return:
     '''
-    dirs = webview.windows[0].create_file_dialog(webview.FOLDER_DIALOG)
+    dirs = webview.windows[0].create_file_dialog(webview.SAVE_DIALOG)
+    print(dirs, file=sys.stderr)
     if dirs and len(dirs) > 0:
-        directory = dirs[0]
+        directory = dirs
         if isinstance(directory, bytes):
             directory = directory.decode('utf-8')
             app.dir(directory)
