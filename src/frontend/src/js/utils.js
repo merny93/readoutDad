@@ -9,3 +9,5 @@ function doStuffHandler(response) {
 function toggleFullscreen() {
     doAjax("/fullscreen", "POST", doStuffHandler);
 }
+
+

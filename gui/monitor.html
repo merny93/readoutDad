@@ -3,15 +3,123 @@
     <head lang="en">
         <meta charset="UTF-8">
 <style>
+
+html{
+    height: 100%;
+}
+
 body {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    letter-spacing: 0.2px;
+    word-spacing: 0.6px;
+    font-weight: 600;
+    text-decoration: none solid rgb(68, 68, 68);
+    font-style: normal;
     color: #333;
     font-size: 25pt;
-    background-color: blue;
+    margin: 0px;
+    height: 100%;
+    position: relative;
+    background: #FFFFFF;
+    align-items: center;
+    -webkit-box-shadow: inset 0px 5px 18px 20px rgba(88,126,118,0.79); 
+    box-shadow: inset 0px 5px 18px 20px rgba(88,126,118,0.79);
 }
 
 h1 {
-    font-size: 150pt;
+    font-size: 35pt;
     color: red;
+
+}
+
+.headerBlock{
+    background-color: #686256;
+    position: relative;
+    top: 0px;
+    padding: 20px 0; 
+    text-align: center;
+
+    -webkit-box-shadow: 0px 5px 2px 6px #686256; 
+    box-shadow: 0px 5px 2px 6px #686256;
+
+
+    color: whitesmoke;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 45px;
+    letter-spacing: 1.4px;
+    word-spacing: 0.6px;
+    font-weight: 900;
+    text-decoration: none solid rgb(68, 68, 68);
+    font-style: normal;
+    font-variant: small-caps;
+    text-transform: capitalize;
+
+    margin-bottom: 25px;
+
+}
+
+.startupInfo{
+    text-align: center;
+}
+
+.doButton {
+    color: whitesmoke;
+    font-size: 17px; 
+    line-height: 17px; 
+    padding: 10px; 
+    border-radius: 13px; 
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; 
+    font-weight: 700; 
+    text-decoration: none; 
+    font-style: normal; 
+    font-variant: small-caps; 
+    text-transform: capitalize; 
+    background:burlywood; 
+    box-shadow: #686256 0px 5px 18px 15px inset; 
+    border-top: none; 
+    border-right: none; 
+    border-bottom: 4px solid #587e76; 
+    border-left: none; 
+    border-image: initial; 
+    display: inline-block;
+}
+.doButton:hover {
+    background: white; 
+}
+.doButton:active {
+    background: palevioletred;
+}
+
+
+.navButton{
+    font-size: 25px;
+    color: black;
+    text-decoration: none;
+    text-align: center;
+    margin: auto;
+    line-height: 30px;
+    border: 5px groove #686256;
+    display: inline-block;
+    padding: 10pt;
+    border-radius: 5pt;
+    box-shadow: inset 0px 0px 7px 5px #587e76;
+}
+.navButton:hover{
+    font-style: italic;
+}
+
+
+.doWrap{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%)
+}
+
+.navWrap{
+    position: absolute;
+    bottom: 0pt;
+    left: 50%;
+    transform: translateX(-50%)
 }</style>
 <script>
 
@@ -70,6 +178,9 @@ function doAjax(url, method, responseHandler, data) {
     }
 }
 
+//below are of questionable use
+
+
 
 function getMethods(obj) {
     var result = [];
@@ -83,6 +194,13 @@ function getMethods(obj) {
       }
     }
     return result;
+}
+
+
+function openLink(e) {
+    e.preventDefault()
+    var request = {url: e.currentTarget.href}
+    doAjax("/open-url", "POST", false, request)
 }</script>
 <script>
 //test</script>
@@ -97,7 +215,10 @@ function doStuffHandler(response) {
 
 function toggleFullscreen() {
     doAjax("/fullscreen", "POST", doStuffHandler);
-}</script>
+}
+
+
+</script>
     </head>
 <body>
 

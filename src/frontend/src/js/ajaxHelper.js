@@ -54,6 +54,9 @@ function doAjax(url, method, responseHandler, data) {
     }
 }
 
+//below are of questionable use
+
+
 
 function getMethods(obj) {
     var result = [];
@@ -67,4 +70,11 @@ function getMethods(obj) {
       }
     }
     return result;
+}
+
+
+function openLink(e) {
+    e.preventDefault()
+    var request = {url: e.currentTarget.href}
+    doAjax("/open-url", "POST", false, request)
 }

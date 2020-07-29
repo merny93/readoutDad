@@ -2,7 +2,7 @@ import os, io, sys
 
 
 
-##build up the html files from resources
+##build up the html files from src/frontend and dump them into the gui folder
 
 
 
