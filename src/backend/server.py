@@ -1,9 +1,10 @@
 import json
 import os
-import webbrowser
+#import webbrowser
 from functools import wraps
+import htmltools
 
-from flask import Flask, url_for, render_template, jsonify, request, make_response
+from flask import Flask, render_template, jsonify, request
 import webview
 import app
 import sys
@@ -52,22 +53,29 @@ def setup():
 def monitor():
     return render_template('monitor.html', token=webview.token)
 
+@server.route('/get/vals', methods=['POST'])
+def pre_fill_valls():
+    '''
+    Get already exisitng values
+    '''
+    response = app.pre_fill(request.json)
+    return response
 
-
-@server.route("/values/<vals>", methods=['POST'])
-def values(vals):
+@server.route("/values", methods=['POST'])
+def values():
     '''
     Set the desired params for device
     '''
-    worked = app.set_params(vals)
-
+    sent_data = request.json
+    worked = False
+    worked = app.set_params(sent_data)
     if worked:
         response = {
-            'status': 'ok',
+            'result': 'ok',
         }
     else:
         response = {
-            'status': 'error',
+            'result': 'error',
         }
     return jsonify(response)
 
@@ -77,6 +85,7 @@ def values(vals):
 def initialize():
     '''
     Perform heavy-lifting initialization asynchronously.
+    will run every time we open any page. probs useless
     :return:
     '''
     can_start = app.initialize()
@@ -123,28 +132,21 @@ def fullscreen():
 
 
 
-@server.route('/do/stuff', methods=['POST'])
-@verify_token
-def do_stuff():
-    result = app.do_stuff()
-
-    if result:
-        response = {'status': 'ok', 'result': result}
-    else:
-        response = {'status': 'error'}
-
-    return jsonify(response)
-
 
 @server.route('/connection', methods=['POST'])
 @verify_token
 def connection():
-    result = app.serial_connection()
+    try:
+        result = app.serial_connection()
+        success = True
+    except Exception as ex:
+        result = str(ex)
+        success = False
 
-    if result:
+    if success is True:
         response = {'status': 'ok', 'result': result}
     else:
-        response = {'status': 'error'}
+        response = {'status': 'error', 'result': result}
 
     return jsonify(response)
 
@@ -154,4 +156,7 @@ def run_server():
 
 
 if __name__ == '__main__':
+    if htmltools.build_html() != True:
+        print('Failed to build HTML', file=sys.stderr)
+        exit(1)
     run_server()

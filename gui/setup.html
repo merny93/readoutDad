@@ -213,32 +213,62 @@ function openFolderHandler() {
 function openFolder() {
     doAjax("/choose/path", "POST", openFolderHandler);
 }
+var xy;
+function getFields() {
+    inputs = document.getElementsByTagName('input');
+    console.log(inputs)
+    xy = inputs;
+    var fields = new Object();
+    for (let index = 0; index < inputs.length; index++) {
+        fields[index] = inputs[index].id;   
+        console.log(fields[index])
+    }
+    return fields
+}
+
+function prevValFiller(response) {
+    //will print the result field to 
+    if (this.responseText) {
+        var response = JSON.parse(this.responseText);
+        for (var key in response){
+            document.getElementById(key).value = response[key];
+        }
+    }
+
+}
+
+ 
+function triggerPreFill(){
+    var stuff = getFields();
+    console.log(stuff)
+    doAjax("/get/vals", "POST", prevValFiller, stuff)
+}
+
+document.addEventListener("DOMContentLoaded", triggerPreFill);
+
+var xx;
 
 function submit() {
     //first get values and concatinate them
-   
-    var strs = new Array(3)
-    var data_string = "";
 
-    for (let index = 1; index <= strs.length; index++) {
-        var ind = "v".concat(index.toString()); 
-        if (index != strs.length) {
-            var toAppend = document.getElementById(ind).value.concat("~");
-            data_string = data_string.concat(toAppend);
-        } else{
-            data_string = data_string.concat(document.getElementById(ind).value);
-        }
-        
-        
+    var valHolder = new Object();
+
+    var fields = getFields()
+    xx = fields
+    for (key in fields) {
+        valHolder[fields[key]] =  document.getElementById(fields[key]).value;        
     }
-    var toSend = "/values/".concat(data_string);
-    doAjax(toSend, "POST", doStuffHandler);
+
+    doAjax("/values", "POST", doStuffHandler, valHolder);
 }</script>
 <script>
 function doStuffHandler(response) {
+    //will print the result field to 
     if (this.responseText) {
         var response = JSON.parse(this.responseText);
-        document.getElementById("stuff-container").innerHTML = response.result;
+        if (typeof response.result != 'undefined'){
+            document.getElementById("stuff-container").innerHTML = response.result;
+        }
     }
 
 }
@@ -255,11 +285,11 @@ function toggleFullscreen() {
 <h1>values</h1>
 
 <label for="fname">Value 1:</label>
-<input type="text" id="v1" name="v1"><br><br>
+<input type="text" id="name" name="v1"><br><br>
 <label for="fname">Value 2:</label>
-<input type="text" id="v2" name="v2"><br><br>
+<input type="text" id="value" name="v2"><br><br>
 <label for="fname">Value 3:</label>
-<input type="text" id="v3" name="v3"><br><br>
+<input type="text" id="stuff" name="v3"><br><br>
 
 <button onclick="openFolder()">Select save File</button>
 <button onclick="toggleFullscreen()">Toggle fullscreen</button>
