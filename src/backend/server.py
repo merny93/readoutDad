@@ -53,12 +53,12 @@ def setup():
 def monitor():
     return render_template('monitor.html', token=webview.token)
 
-@server.route('/get/vals', methods=['POST'])
+@server.route('/get/vals')
 def pre_fill_valls():
     '''
     Get already exisitng values
     '''
-    response = app.pre_fill(request.json)
+    response = app.pre_fill()
     return response
 
 @server.route("/values", methods=['POST'])
@@ -66,40 +66,27 @@ def values():
     '''
     Set the desired params for device
     '''
-    sent_data = request.json
-    worked = False
-    worked = app.set_params(sent_data)
-    if worked:
-        response = {
-            'result': 'ok',
-        }
-    else:
-        response = {
-            'result': 'error',
-        }
+    try:
+        response = app.set_params(request.json)
+    except Exception as ex:
+        response = {'result': str(ex)}
     return jsonify(response)
 
 
-@server.route('/init', methods=['POST'])
+@server.route('/monitor/refresh')
+def refresh():
+    response = app.refresh()
+    return response
+
+@server.route('/connection', methods=['POST'])
 @verify_token
-def initialize():
-    '''
-    Perform heavy-lifting initialization asynchronously.
-    will run every time we open any page. probs useless
-    :return:
-    '''
-    can_start = app.initialize()
-
-    if can_start:
-        response = {
-            'status': 'ok',
-        }
-    else:
-        response = {
-            'status': 'error'
-        }
-
+def connection():
+    try:
+        response = app.serial_connection()
+    except Exception as ex:
+        response = {'status': 'error','result' :str(ex)}
     return jsonify(response)
+
 
 
 @server.route('/choose/path', methods=['POST'])
@@ -133,22 +120,6 @@ def fullscreen():
 
 
 
-@server.route('/connection', methods=['POST'])
-@verify_token
-def connection():
-    try:
-        result = app.serial_connection()
-        success = True
-    except Exception as ex:
-        result = str(ex)
-        success = False
-
-    if success is True:
-        response = {'status': 'ok', 'result': result}
-    else:
-        response = {'status': 'error', 'result': result}
-
-    return jsonify(response)
 
 
 def run_server():

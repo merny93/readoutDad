@@ -2,14 +2,21 @@
 Application stub
 """
 import sys
+import time
+import random ##for fake data gen
 
 
 
-params = {}
-default_params = {
+
+params = {
     'name':10,
     'value': 20,
     'stuff': 30
+}
+
+monitor_vals = {
+    'voltage': 0,
+    'current': 0
 }
 
 
@@ -21,7 +28,7 @@ def initialize():
 
 
 def serial_connection():
-    response = "Connection established on port ......"
+    response = {'status': 'ok','result': "Connection established on port ......"}
     return response
 
 def set_params(data):
@@ -30,23 +37,23 @@ def set_params(data):
             continue
         params[key] = data[key]
         ##got the values back nice
-    return True
+    return {'result': 'ok'}
 
 def dir(dirz):
     return True
 
-def pre_fill(data):
+def pre_fill():
     response = {}
-    for key in data:
-        if key == "token":
-            continue
-        field = data[key]
-        print(field, file=sys.stderr)
-        if field not in params.keys():
-            try:
-                response[field] = default_params[field]
-            except KeyError:
-                response[field] = "no preset"
-        else:
-            response[field] = params[field]
+    for key in params:
+        response[key] = params[key]
+    return response
+
+def getData():
+    for key in monitor_vals:
+        monitor_vals[key] = random.randrange(100)
+    return
+
+def refresh():
+    getData()
+    response = {'vals': monitor_vals, 'time': time.asctime()}
     return response

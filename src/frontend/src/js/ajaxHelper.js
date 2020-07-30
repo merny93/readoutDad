@@ -2,7 +2,7 @@
 //important
 window.token = '{{ token }}';
 // Perform background initialization
-doAjax("/init", "POST");
+// doAjax("/init", "POST");
 
 
 //bellow is the ajax handler
